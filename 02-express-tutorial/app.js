@@ -1,8 +1,11 @@
-const express = require('express')
+import express from 'express';
 const app = express()
 const PORT = 5000
 
-const { products, people } = require('./data.js') // names have to be exactly the same as they are in data.js
+/*
+Please note that names within '{}' have to be exactly the same as they are in 'data.js'
+*/
+import { products, people } from './data.js'
 
 app.get('/', (req, res) => {
     console.log('get received');
