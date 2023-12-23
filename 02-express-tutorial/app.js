@@ -21,7 +21,7 @@ app.get('/api/products', (req, res) => {
 })
 
 /* 
-Route Parameters: 
+Route Parameters1: 
 add '/:XXXX', you can name XXX whatever you want but make it meaningful as usual
 automatically parse the request URL to find what behind 'products/',
 and set it to an attribute of req.params called 'productID'.
