@@ -1,3 +1,8 @@
+/*
+simple data file that contains two arrays:
+products and people
+*/
+
 export const products = [
   {
     id: 1,

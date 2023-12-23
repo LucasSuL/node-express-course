@@ -1,18 +1,28 @@
 import express from 'express';
+// Please note that names within '{}' have to be exactly the same as they are in 'data.js'
+import { products, people } from './data.js'
+
+// import two middleware
+import { logger } from './logger.js';
+import { authorize } from './authorize.js'
+
 const app = express()
 const PORT = 5000
 
-/*
-Please note that names within '{}' have to be exactly the same as they are in 'data.js'
-*/
-import { products, people } from './data.js'
+// make sure all req go through logger firstly, authorize secondly, and then been sent to route for response
+// app.use([logger, authorize])
 
+/*
+below could seen as a ROUTE, which defines the code to execute when we reveice certain URL
+*/
 app.get('/', (req, res) => {
     console.log('get received');
     res.send('<h1>HI HOME PAGE</h1><a href="/api/products">Products Here</a>')
 })
 
-app.get('/api/products', (req, res) => {
+// if i put middleware here, then these procedures only works for this route.
+app.get('/api/products', [logger, authorize], (req, res) => {
+    console.log(req.name)
     const newProduct = products.map((product) => {
         const { id, name, image } = product
         return { id, name, image }
