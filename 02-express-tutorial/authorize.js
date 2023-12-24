@@ -1,4 +1,4 @@
-export const authorize = (req,res,next)=>{
+const authorize = (req,res,next)=>{
     const{user} = req.query
     console.log(user)
     if(user === 'john'){
@@ -8,3 +8,4 @@ export const authorize = (req,res,next)=>{
         res.status(401).send('Unauthorized')
     }
 }
+module.exports = authorize

@@ -1,16 +1,34 @@
-import express from 'express';
+const express = require ('express');
 // Please note that names within '{}' have to be exactly the same as they are in 'data.js'
-import { products, people } from './data.js'
-
-// import two middleware
-import { logger } from './logger.js';
-import { authorize } from './authorize.js'
 
 const app = express()
-const PORT = 5000
 
-// make sure all req go through logger firstly, authorize secondly, and then been sent to route for response
-// app.use([logger, authorize])
+//routes
+const people = require('./routes/people')
+const auth = require('./routes/auth')
+
+const PORT = 5000
+const {products} = require('./data');
+
+
+// // import two middleware
+// const { logger } = require('./logger.js');
+// const { authorize } = require('./authorize.js')
+
+/*
+static assets: by using this, we will not
+add every html, css, images whatever one by one
+see 02-http-app.js
+*/
+app.use(express.static('./methods-public'))
+
+// parse encoded form data of the request body
+app.use(express.urlencoded({ extended: false }))
+// parse json of the request body
+app.use(express.json())
+
+app.use('/api/people',people)
+app.use('/login',auth)
 
 /*
 below could seen as a ROUTE, which defines the code to execute when we reveice certain URL
@@ -20,8 +38,9 @@ app.get('/', (req, res) => {
     res.send('<h1>HI HOME PAGE</h1><a href="/api/products">Products Here</a>')
 })
 
+
 // if i put middleware here, then these procedures only works for this route.
-app.get('/api/products', [logger, authorize], (req, res) => {
+app.get('/api/products', (req, res) => {
     console.log(req.name)
     const newProduct = products.map((product) => {
         const { id, name, image } = product
@@ -48,7 +67,7 @@ app.get('/api/products/:productID', (req, res) => {
 })
 
 /*
-Query parameters
+Query parameters:
 read this parameter by 'req.query'
 typically at the end of the URL, start with '?', seperate with '&'
 */
@@ -72,6 +91,7 @@ app.get('/api/v1/query', (req, res) => {
         return res.status(200).json(sortedProducts)
     }
 })
+
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}...`);
